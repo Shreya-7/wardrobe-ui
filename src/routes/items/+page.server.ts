@@ -2,7 +2,18 @@ import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type B
 
 export async function load() {
     const items: Item[] = await ItemsService.itemsGetItemsGet();
-    return { items };
+    return { 
+        items: items,
+        createFormDropdownValues: {
+            times: Object.values(Time).map(value => toTitleCase(value)),
+            seasons: Object.values(Season).map(value => toTitleCase(value)),
+            occasions: Object.values(Occasion).map(value => toTitleCase(value)),
+            // TODO model: convert to enum keys
+            sizes: ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
+            materials: ["Cotton", "Jute", "Wool", "Silk"],
+            categories: ["Sarees", "Dresses", "Kurtis"]
+        } 
+    };
 }
 
 export const actions = {
@@ -30,6 +41,15 @@ export const actions = {
 
 function getRequestField(data: FormData, property: string) {
     return data.get(property)?.toString().toLowerCase();
+}
+
+function toTitleCase(str: string) {
+    let titleCase = "";
+    str.split(" ").forEach(word => {
+        const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        titleCase += capitalizedWord + " ";
+    });
+    return titleCase.trim();
 }
 
 type Category = (Accessory | Bottomwear | Footwear | Topwear | SinglePiece | Underwear);
