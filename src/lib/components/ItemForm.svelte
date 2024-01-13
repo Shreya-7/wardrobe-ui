@@ -1,8 +1,10 @@
 <script>
 // @ts-nocheck
+	import { enhance } from '$app/forms';
     export let action;
     export let sizes, materials, categories, times, seasons, occasions;
     export let item;
+
     function getValue(property) {
         let value = "";
         if (item[property]) {
@@ -15,7 +17,7 @@
     }
 </script>
 
-<form method="POST" action="{action}">
+<form method="POST" action="{action}" use:enhance>
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="name">Name of the item</label>

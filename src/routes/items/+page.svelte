@@ -1,6 +1,7 @@
 <script>
     import ItemForm from "$lib/components/ItemForm.svelte";
     export let data;
+    export let form;
     const items = data.items;
 </script>
 
@@ -16,6 +17,14 @@
         Create item
     </button>
     <div class="collapse mb-3" id="createItemForm">
+        {#if form?.failure}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span>{form?.errorMessage}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {/if}
         <ItemForm 
             action="?/create" 
             sizes={data.createFormDropdownValues.sizes}

@@ -16,18 +16,29 @@ export async function load({ params }) {
 export const actions = {
     update: async ({ cookies, request }) => {
         const data = await request.formData();
-        var inputItem: Item = getItemFormData(data);
-        var completeItem = {
-            ...{
-                "item_id": item.item_id
-            }, ...inputItem
-        };
+        try {
+            var inputItem: Item = getItemFormData(data);
+            // the form does not send back the `item_id`
+            var completeItem = {
+                ...{ "item_id": item.item_id }, ...inputItem
+            };
 
-        if (isEqual(completeItem, item)) {
-            return fail(400, { "message": "No field selected to be updated -_^" })
+            if (isEqual(completeItem, item)) {
+                return fail(400, { "message": "No field selected to be updated -_^" })
+            }
+
+            try {
+                await ItemsService.itemsItemIdPutItemsItemIdPut(item.item_id!, inputItem);
+                console.log("Successfully updated item: " + item.item_id);
+            }
+            catch (err) {
+                console.log("Error occured when trying to create item ", err);
+                return fail(400, { failure: true, errorMessage: "Some problem has occured :(" })
+            }
+        } catch (err) {
+            console.log("Error thrown when trying to serialise input data to API model ", err);
+            return fail(422, { failure: true, errorMessage: "Invalid input data! :/" })
         }
-        await ItemsService.itemsItemIdPutItemsItemIdPut(item.item_id!, inputItem);
-        console.log("Successfully updated item: " + item.item_id);
     },
     delete: async ({ cookies, request }) => {
         await ItemsService.itemsItemIdDeleteItemsItemIdDelete(item.item_id!);

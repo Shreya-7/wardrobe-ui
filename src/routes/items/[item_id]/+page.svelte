@@ -2,6 +2,7 @@
     import ItemForm from "$lib/components/ItemForm.svelte";
 
     export let data;
+    export let form;
     let item = data.item;
     $: editMode = false;
 
@@ -47,6 +48,14 @@
     </div>
 </div>
 {:else}
+{#if form?.failure}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span>{form?.errorMessage}</span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{/if}
 <ItemForm 
     action="?/update" 
     sizes={data.createFormDropdownValues.sizes}
