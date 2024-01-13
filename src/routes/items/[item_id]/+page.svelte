@@ -1,23 +1,24 @@
 <script>
     export let data;
+    $: item = data.item;
 </script>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-xs-12">
-            <img class="img-fluid" src="{data.item.image}" alt="Card cap">
+            <img class="img-fluid" src="{item.image}" alt="Card cap">
         </div>
         <div class="col-md-6 col-xs-12">
-          <h5>{data.item.name}</h5>
-          <p><small class="text-muted">{data.item.category}</small></p>
+          <h5>{item.name}</h5>
+          <p><small class="text-muted">{item.category}</small></p>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><b>Size: </b>{data.item.size}</li>
-            <li class="list-group-item"><b>Time: </b>{data.item.time}</li>
-            <li class="list-group-item"><b>Season: </b>{data.item.season}</li>
-            <li class="list-group-item"><b>Material: </b>{data.item.material}</li>
-            <li class="list-group-item"><b>Occasion: </b>{data.item.occasion}</li>
-            <li class="list-group-item"><b>Tags: </b>{data.item.tags}</li>
-            <li class="list-group-item"><b>Colors: </b>{data.item.colors}</li>
+            <li class="list-group-item"><b>Size: </b>{item.size}</li>
+            <li class="list-group-item"><b>Time: </b>{item.time}</li>
+            <li class="list-group-item"><b>Season: </b>{item.season}</li>
+            <li class="list-group-item"><b>Material: </b>{item.material}</li>
+            <li class="list-group-item"><b>Occasion: </b>{item.occasion}</li>
+            <li class="list-group-item"><b>Tags: </b>{item.tags}</li>
+            <li class="list-group-item"><b>Colors: </b>{item.colors}</li>
         </ul>
         </div>
     </div>

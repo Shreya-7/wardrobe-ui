@@ -1,6 +1,8 @@
 import { ItemsService, type Item } from "../../../client";
 
+let item: Item;
+
 export async function load({ params }) {
-    const item: Item = await ItemsService.itemsItemIdGetItemsItemIdGet(params.item_id);
+    item = await ItemsService.itemsItemIdGetItemsItemIdGet(params.item_id);
     return { item };
 }
