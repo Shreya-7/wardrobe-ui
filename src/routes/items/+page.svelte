@@ -1,5 +1,5 @@
 <script>
-    import ItemForm from "$lib/ItemForm.svelte";
+    import ItemForm from "$lib/components/ItemForm.svelte";
     export let data;
     $: items = data.items;
 </script>

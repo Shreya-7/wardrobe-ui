@@ -1,5 +1,5 @@
 <script>
-    import App from "../lib/App.svelte";
+    import App from "../lib/components/App.svelte";
 </script>
 <div class="container-fluid">
     <App />
