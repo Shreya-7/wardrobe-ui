@@ -1,7 +1,7 @@
 <script>
     import ItemForm from "$lib/components/ItemForm.svelte";
     export let data;
-    $: items = data.items;
+    const items = data.items;
 </script>
 
 <div class="container">
