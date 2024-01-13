@@ -1,7 +1,9 @@
 import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear } from "../../client";
 
+let items: Item[];
+
 export async function load() {
-    const items: Item[] = await ItemsService.itemsGetItemsGet();
+    items = await ItemsService.itemsGetItemsGet();
     return { 
         items: items,
         createFormDropdownValues: {
@@ -35,7 +37,8 @@ export const actions = {
             // TODO auth: fetch user_id from cookie
             user: "3dff0fe5-e157-4d90-9787-78c1a6e6c470"
         };
-        ItemsService.itemsPostItemsPost(itemToBeCreated);
+        const createdItem: any = ItemsService.itemsPostItemsPost(itemToBeCreated);
+        items = [...items, createdItem];
 	}
 };
 

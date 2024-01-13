@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-xs-12">
-            <img class="img-fluid" src="https://swaag.in/wp-content/uploads/2020/08/5f42972117d5a.jpg" alt="Card cap">
+            <img class="img-fluid" src="{data.item.image}" alt="Card cap">
         </div>
         <div class="col-md-6 col-xs-12">
           <h5>{data.item.name}</h5>
