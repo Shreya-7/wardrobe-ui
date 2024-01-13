@@ -4,6 +4,13 @@
     const items = data.items;
 </script>
 
+<style>
+    .card:hover{
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+    }
+</style>
+
 <div class="container">
     <button class="btn btn-primary mb-3" type="button" data-toggle="collapse" data-target="#createItemForm" aria-expanded="false" aria-controls="createItemForm">
         Create item

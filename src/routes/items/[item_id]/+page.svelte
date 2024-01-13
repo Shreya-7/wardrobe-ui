@@ -35,6 +35,13 @@
           >
             Edit
           </button>
+          <form method="POST" action="?/delete">
+            <button type="submit"
+                class="btn btn-danger ml-4"
+            >
+                Delete
+            </button>
+          </form>
         </div>
         
     </div>
