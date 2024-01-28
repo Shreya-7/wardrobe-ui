@@ -2,7 +2,7 @@
 // @ts-nocheck
 	import { enhance } from '$app/forms';
     export let action;
-    export let sizes, materials, categories, times, seasons, occasions;
+    export let sizes, materials, categories, times, seasons, occasions, kinds;
     export let item;
 
     function getValue(property) {
@@ -75,6 +75,14 @@
             <select class="form-control" id="occasion" name="occasion">
                 {#each occasions as occasion}
                 <option value="{occasion}" selected="{isPresentOnItem('occasion', occasion)}">{occasion}</option>
+                {/each}
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="size">Kind</label>
+            <select class="form-control" id="kind" name="kind">
+                {#each kinds as kind}
+                <option value="{kind}" selected="{isPresentOnItem('kind', kind)}">{kind}</option>
                 {/each}
             </select>
         </div>
