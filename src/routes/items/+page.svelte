@@ -33,6 +33,7 @@
             times={data.createFormDropdownValues.times}
             seasons={data.createFormDropdownValues.seasons}
             occasions={data.createFormDropdownValues.occasions}
+            kinds={data.createFormDropdownValues.kinds}
             item=null
         />
     </div>
@@ -45,7 +46,7 @@
             <img class="card-img-top" src="{item.image}" alt="Card cap">
             <div class="card-body">
             <h5 class="card-title">{item.name}</h5>
-            <p class="card-text"><small class="text-muted">{item.category}</small></p>
+            <p class="card-text"><small class="text-muted">{item.category} - {item.kind}</small></p>
             </div>
         </div>
     </a>

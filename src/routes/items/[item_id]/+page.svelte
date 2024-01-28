@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6 col-xs-12" id="item-details">
           <h5>{item.name}</h5>
-          <p><small class="text-muted">{item.category}</small></p>
+          <p><small class="text-muted">{item.category} - {item.kind}</small></p>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><b>Size: </b>{item.size}</li>
             <li class="list-group-item"><b>Time: </b>{item.time}</li>
@@ -64,6 +64,7 @@
     times={data.createFormDropdownValues.times}
     seasons={data.createFormDropdownValues.seasons}
     occasions={data.createFormDropdownValues.occasions}
+    kinds={data.createFormDropdownValues.kinds}
     item={item}
 />
 {/if}
