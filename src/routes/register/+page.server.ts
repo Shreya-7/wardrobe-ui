@@ -4,10 +4,6 @@ import { fail, redirect } from "@sveltejs/kit";
 
 let error: Boolean = false;
 
-export async function load() {
-    return {"error": error}
-}
-
 export const actions: Actions = {
     register: async ({ request }) => {
         const data = await request.formData();

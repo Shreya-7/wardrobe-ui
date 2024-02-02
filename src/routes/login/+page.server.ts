@@ -5,10 +5,6 @@ import { fail, redirect } from "@sveltejs/kit";
 
 let error: Boolean = false;
 
-export async function load() {
-    console.log(OpenAPI.TOKEN);
-}
-
 export const actions: Actions = {
     login: async ({ cookies, request }) => {
         error = false;

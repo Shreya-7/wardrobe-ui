@@ -24,7 +24,7 @@
                     <a href="/" class="nav-link">Hi {user.name}</a>
                 </li>
                 <li class="nav-item active">
-                    <a href="/logout" class="nav-link">logout</a>
+                    <a href="/logout" class="nav-link">Logout</a>
                 </li>
             {:else}
                 <li class="nav-item active">
