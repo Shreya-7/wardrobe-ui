@@ -15,10 +15,10 @@ export const actions: Actions = {
         try {
             const loginResp = await AuthenticationService.authLoginPostAuthLoginPost(loginRequest);            
             cookies.set('accessToken', loginResp);
-            redirect(302, "/")
         } catch (err) {
             const apiError = err as ApiError
             return fail(apiError.status, { errorMessage: apiError.message})
         }
+        throw redirect(302, "/");
     }
 }

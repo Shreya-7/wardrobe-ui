@@ -1,8 +1,7 @@
-import { AuthenticationService, OpenAPI, type AuthLoginPostRequest, ApiError, type AuthRegisterPostRequest } from "../../client"
-import type { Actions, RequestEvent } from "./$types";
+import { AuthenticationService, ApiError, type AuthRegisterPostRequest } from "../../client"
+import type { Actions } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
-let error: Boolean = false;
 
 export const actions: Actions = {
     register: async ({ request }) => {
@@ -15,10 +14,10 @@ export const actions: Actions = {
         const registerRequest: AuthRegisterPostRequest = {name, email_id, password};
         try {
             await AuthenticationService.authRegisterPostAuthRegisterPost(registerRequest);
-            return {success: true}
         } catch (err) {
             const apiError = err as ApiError
             return fail(apiError.status, { errorMessage: apiError.message})
         }
+        throw redirect(302, "/login");
     }
 }
