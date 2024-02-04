@@ -1,4 +1,4 @@
-import { Time, Season, Occasion, Kind, Material, Size } from "../client";
+import { Time, Season, Occasion, Kind, Material, Size, type Item } from "../client";
 
 export function getItemFormModel() {
     return {
@@ -14,7 +14,7 @@ export function getItemFormModel() {
     }
 }
 
-export function getItemFormData(data: FormData) {
+export function getItemFormData(data: FormData, userId: string): Item {
     // TODO model: Remove this any
     const category: any =  data.get('category')?.toString();
     return { 
@@ -28,8 +28,7 @@ export function getItemFormData(data: FormData) {
         occasion: getRequestField(data, 'occasion') as Occasion,
         tags: [],
         kind: getRequestField(data, 'kind') as Kind,
-        // TODO auth: fetch user_id from cookie
-        user: "3dff0fe5-e157-4d90-9787-78c1a6e6c470"
+        user_id: userId
     };
 }
 
@@ -41,7 +40,7 @@ export function getRequestField(data: FormData, property: string, lowercase: boo
     return value;
 }
 
-export function toTitleCase(str: string) {
+export function toTitleCase(str: string): string {
     let titleCase = "";
     str.split(" ").forEach(word => {
         const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
