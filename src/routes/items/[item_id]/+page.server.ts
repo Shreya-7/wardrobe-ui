@@ -2,6 +2,7 @@ import { ItemsService, type Item } from "../../../client";
 import { getItemFormData, getItemFormModel } from "$lib/itemFormUtils";
 import { isEqual } from "lodash";
 import { fail, redirect } from "@sveltejs/kit";
+import { USER_ID } from "../../../constants";
 
 let item: Item;
 
@@ -16,8 +17,12 @@ export async function load({ params }) {
 export const actions = {
     update: async ({ cookies, request }) => {
         const data = await request.formData();
+        const userId = cookies.get(USER_ID);
+        if (!userId) {
+            throw redirect(302, "/unauthorised");
+        }
         try {
-            var inputItem: Item = getItemFormData(data);
+            var inputItem: Item = getItemFormData(data, userId);
             // the form does not send back the `item_id`
             var completeItem = {
                 ...{ "item_id": item.item_id }, ...inputItem

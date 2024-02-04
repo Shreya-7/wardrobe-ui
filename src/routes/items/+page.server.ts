@@ -1,6 +1,7 @@
 import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear } from "../../client";
 import { getItemFormData, getItemFormModel } from "$lib/itemFormUtils";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
+import { USER_ID } from "../../constants";
 
 let items: Item[];
 
@@ -16,8 +17,12 @@ export async function load() {
 export const actions = {
 	create: async ({ cookies, request }) => {
         const data = await request.formData();
+        const userId = cookies.get(USER_ID);
+        if (!userId) {
+            throw redirect(302, "/unauthorised");
+        }
         try {
-            var itemToBeCreated: Item = getItemFormData(data);
+            var itemToBeCreated: Item = getItemFormData(data, userId);
             try {
                 const createdItem: any = await ItemsService.itemsPostItemsPost(itemToBeCreated);
                 console.log("Successfully created new item: " + createdItem);
