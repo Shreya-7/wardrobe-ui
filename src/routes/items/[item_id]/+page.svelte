@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import ItemForm from "$lib/components/ItemForm.svelte";
 
     export let data;

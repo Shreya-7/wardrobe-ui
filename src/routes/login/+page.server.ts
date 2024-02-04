@@ -1,8 +1,8 @@
-import { AuthenticationService, OpenAPI, type AuthLoginPostRequest, ApiError, UsersService } from "../../client"
-import type { Actions, RequestEvent } from "./$types"
-import { goto } from "$app/navigation";
+import { AuthenticationService, type AuthLoginPostRequest, ApiError, UsersService } from "../../client"
+import type { Actions } from "./$types"
 import { fail, redirect } from "@sveltejs/kit";
-import { ACCESS_TOKEN, USER_ID } from "../../constants";
+import { ACCESS_TOKEN, USER_ID, USER_NAME } from "../../constants";
+import { OpenAPI } from "../../client/core/OpenAPI";
 
 export const actions: Actions = {
     login: async ({ cookies, request }) => {
@@ -13,8 +13,6 @@ export const actions: Actions = {
         try {
             const loginResp = await AuthenticationService.authLoginPostAuthLoginPost(loginRequest);            
             cookies.set(ACCESS_TOKEN, loginResp);
-            const user = await UsersService.usersUserIdGetUserGet();
-            cookies.set(USER_ID, user.user_id!);
         } catch (err) {
             const apiError = err as ApiError
             return fail(apiError.status, { errorMessage: apiError.message})

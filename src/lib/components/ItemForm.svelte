@@ -1,19 +1,26 @@
-<script>
-// @ts-nocheck
+<script lang="ts">
 	import { enhance } from '$app/forms';
-    export let action;
-    export let sizes, materials, categories, times, seasons, occasions, kinds;
-    export let item;
+    import type { Item } from '../../client';
+    export let action: string;
+    export let sizes: Array<string>, 
+        materials: Array<string>, 
+        categories: Array<string>, 
+        times: Array<string>, 
+        seasons: Array<string>, 
+        occasions: Array<string>, 
+        kinds: Array<string>;
+    export let item: Item | null;
 
-    function getValue(property) {
-        let value = "";
-        if (item[property]) {
+    function getValue(property: keyof Item) {
+        let value = null;
+        if (item != null && item[property]) {
             value = item[property];
         }
-        return value;
+        return value ? value : "";
     }
-    function isPresentOnItem(property, value) {
-        return item[property]?.toString().toLowerCase() === value.toString().toLowerCase();
+    function isPresentOnItem(property: keyof Item, value: string) {
+        let valueOnItem = getValue(property);
+        return valueOnItem.toString().toLowerCase() == value.toString().toLowerCase();
     }
 </script>
 
