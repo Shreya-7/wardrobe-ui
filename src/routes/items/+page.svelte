@@ -34,7 +34,7 @@
             seasons={data.createFormDropdownValues.seasons}
             occasions={data.createFormDropdownValues.occasions}
             kinds={data.createFormDropdownValues.kinds}
-            item=null
+            item={null}
         />
     </div>
 </div>
