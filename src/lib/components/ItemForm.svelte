@@ -19,7 +19,8 @@
         return value ? value : "";
     }
     function isPresentOnItem(property: keyof Item, value: string) {
-        return item?[property]?.toString().toLowerCase() === value.toString().toLowerCase() : false;
+        let valueOnItem = getValue(property);
+        return valueOnItem.toString().toLowerCase() == value.toString().toLowerCase();
     }
 </script>
 
