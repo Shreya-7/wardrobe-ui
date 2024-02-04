@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-    import type { Item, Material, Size } from '../../client';
+    import type { Item } from '../../client';
     export let action: string;
     export let sizes: Array<string>, 
         materials: Array<string>, 
