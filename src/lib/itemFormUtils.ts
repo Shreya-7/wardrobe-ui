@@ -52,7 +52,7 @@ export function toTitleCase(str: string): string {
 }
 
 export async function uploadImageForItem(item: Item, data: FormData) {
-    var file: File = data.get("image") as File;
+    const file: File = data.get("image") as File;
     await ItemImagesService.itemsPostItemsItemIdImagesPost(item.item_id!, {
         image_file: file
     });

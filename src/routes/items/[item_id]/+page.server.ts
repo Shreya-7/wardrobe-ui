@@ -23,9 +23,9 @@ export const actions = {
             throw redirect(302, "/unauthorised");
         }
         try {
-            var inputItem: Item = getItemFormData(data, userId);
+            const inputItem: Item = getItemFormData(data, userId);
             // the form does not send back the `item_id`
-            var completeItem = {
+            const completeItem = {
                 ...{ "item_id": item.item_id }, ...inputItem
             };
             // TODO: need to find a better way to do this

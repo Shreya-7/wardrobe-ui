@@ -21,9 +21,9 @@ export const actions = {
         if (!userId) {
             throw redirect(302, "/unauthorised");
         }
-        var createdItem = null;
+        let createdItem = null;
         try {
-            var itemToBeCreated: Item = getItemFormData(data, userId);
+            const itemToBeCreated: Item = getItemFormData(data, userId);
             try {
                 createdItem = await ItemsService.itemsPostItemsPost(itemToBeCreated);
                 console.log("Successfully created new item: " + createdItem.item_id);

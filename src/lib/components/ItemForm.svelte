@@ -37,7 +37,7 @@ This unfortunately causes us to send the entire Item object to the edit action a
         <!-- TODO: figure out how to display the existing image in case of editing -->
         <div class="form-group col-md-4">
             <label for="image">Image</label>
-            <input type="file" class="form-control" id="image" name="image">
+            <input type="file" class="form-control" id="image" name="image" accept=".jpg, .png, .jpeg">
         </div>
         <div class="form-group col-md-2">
             <label for="size">Size</label>
