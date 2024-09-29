@@ -3,8 +3,8 @@
 
     export let data;
     export let form;
-    let item = data.item;
-    $: editMode = false;
+    $: item = data.item;
+    $: editMode = data.editMode;
 
     function turnOnEditMode() {
         editMode = true;

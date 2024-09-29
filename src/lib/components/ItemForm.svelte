@@ -24,15 +24,20 @@
     }
 </script>
 
-<form method="POST" action="{action}" use:enhance>
+<!--
+In case of editing, we pre-populate the existing values of these fields so that the customer knows the value they are about to change.
+This unfortunately causes us to send the entire Item object to the edit action and to the backend API (which supports piecewise updates).
+-->
+<form method="POST" action="{action}" use:enhance enctype="multipart/form-data">
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="name">Name of the item</label>
             <input type="text" class="form-control" id="name" name="name" value="{getValue('name')}" required>
         </div>
+        <!-- TODO: figure out how to display the existing image in case of editing -->
         <div class="form-group col-md-4">
-            <label for="image">Image URL</label>
-            <input type="text" class="form-control" id="image" name="image" value="{getValue('image')}">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image" accept=".jpg, .png, .jpeg">
         </div>
         <div class="form-group col-md-2">
             <label for="size">Size</label>
