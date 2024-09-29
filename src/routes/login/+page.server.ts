@@ -1,8 +1,7 @@
-import { AuthenticationService, type AuthLoginPostRequest, ApiError, UsersService } from "../../client"
+import { AuthenticationService, type AuthLoginPostRequest, ApiError } from "../../client"
 import type { Actions } from "./$types"
 import { fail, redirect } from "@sveltejs/kit";
-import { ACCESS_TOKEN, USER_ID } from "../../constants";
-import { OpenAPI } from "../../client/core/OpenAPI";
+import { ACCESS_TOKEN } from "../../constants";
 
 export const actions: Actions = {
     login: async ({ cookies, request }) => {
