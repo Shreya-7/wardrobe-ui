@@ -1,4 +1,5 @@
-import { Time, Season, Occasion, Kind, Material, Size, type Item } from "../client";
+import { isEqual } from "lodash";
+import { Time, Season, Occasion, Kind, Material, Size, type Item, ItemImagesService } from "../client";
 
 export function getItemFormModel() {
     return {
@@ -19,7 +20,6 @@ export function getItemFormData(data: FormData, userId: string): Item {
     const category: any =  data.get('category')?.toString();
     return { 
         name: getRequestField(data, 'name'),
-        image: getRequestField(data, 'image'),
         category: category,
         size: getRequestField(data, 'size') as Size,
         material: getRequestField(data, 'material') as Material,
@@ -27,6 +27,8 @@ export function getItemFormData(data: FormData, userId: string): Item {
         season: getRequestField(data, 'season') as Season,
         occasion: getRequestField(data, 'occasion') as Occasion,
         tags: [],
+        // TODO: remove this, added because Item has this as null by default but the form doesn't support this field yet
+        colors: null,
         kind: getRequestField(data, 'kind') as Kind,
         user_id: userId
     };
@@ -47,4 +49,24 @@ export function toTitleCase(str: string): string {
         titleCase += capitalizedWord + " ";
     });
     return titleCase.trim();
+}
+
+export async function uploadImageForItem(item: Item, data: FormData) {
+    var file: File = data.get("image") as File;
+    await ItemImagesService.itemsPostItemsItemIdImagesPost(item.item_id!, {
+        image_file: file
+    });
+    console.log("Successfully updated new item with image!");
+}
+
+// We need to compare without images because the existing image is a string (URL) and the new image is a File object
+export function hasItemBeenUpdated(oldItem: Item, newItem: Item) {
+    function getItemWithoutImage(item: Item) {
+        const { image, ...itemWithoutImage } = item;
+        return itemWithoutImage;
+    }
+    const oldItemWithoutImage = getItemWithoutImage(oldItem);
+    const newItemWithoutImage = getItemWithoutImage(newItem);
+
+    return !isEqual(oldItemWithoutImage, newItemWithoutImage);
 }

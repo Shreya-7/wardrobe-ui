@@ -1,6 +1,5 @@
 import { ItemsService, type Item } from "../../../client";
-import { getItemFormData, getItemFormModel } from "$lib/itemFormUtils";
-import { isEqual } from "lodash";
+import { getItemFormData, getItemFormModel, hasItemBeenUpdated, uploadImageForItem } from "$lib/itemFormUtils";
 import { fail, redirect } from "@sveltejs/kit";
 import { USER_ID } from "../../../constants";
 
@@ -10,7 +9,9 @@ export async function load({ params }) {
     item = await ItemsService.itemsItemIdGetItemsItemIdGet(params.item_id);
     return {
         item: item,
-        createFormDropdownValues: getItemFormModel()
+        createFormDropdownValues: getItemFormModel(),
+        // need to send this value back to reset the state of the page after updation
+        editMode: false
     };
 }
 
@@ -27,17 +28,25 @@ export const actions = {
             var completeItem = {
                 ...{ "item_id": item.item_id }, ...inputItem
             };
+            // TODO: need to find a better way to do this
+            const imageChanged: boolean = !((data.get("image") as File).name === "undefined");
+            const itemChanged = hasItemBeenUpdated(completeItem, item);
 
-            if (isEqual(completeItem, item)) {
-                return fail(400, { "message": "No field selected to be updated -_^" })
+            if (!itemChanged && !imageChanged) {
+                return fail(400, { failure: true, errorMessage: "No field selected to be updated -_^" })
             }
 
             try {
-                await ItemsService.itemsItemIdPutItemsItemIdPut(item.item_id!, inputItem);
+                if (itemChanged) {
+                    await ItemsService.itemsItemIdPutItemsItemIdPut(item.item_id!, inputItem);
+                }
+                if (imageChanged) {
+                    await uploadImageForItem(item, data);
+                }
                 console.log("Successfully updated item: " + item.item_id);
             }
             catch (err) {
-                console.log("Error occured when trying to create item ", err);
+                console.log("Error occured when trying to update item ", err);
                 return fail(400, { failure: true, errorMessage: "Some problem has occured :(" })
             }
         } catch (err) {

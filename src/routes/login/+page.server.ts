@@ -1,7 +1,7 @@
 import { AuthenticationService, type AuthLoginPostRequest, ApiError, UsersService } from "../../client"
 import type { Actions } from "./$types"
 import { fail, redirect } from "@sveltejs/kit";
-import { ACCESS_TOKEN, USER_ID, USER_NAME } from "../../constants";
+import { ACCESS_TOKEN, USER_ID } from "../../constants";
 import { OpenAPI } from "../../client/core/OpenAPI";
 
 export const actions: Actions = {

@@ -8,7 +8,7 @@ export const load = (async ({ cookies }) => {
     OpenAPI.TOKEN = accessToken;
     try {
         const user = await UsersService.usersUserIdGetUserGet();
-        cookies.set(USER_ID, user.user_id);
+        cookies.set(USER_ID, user.user_id!);
         return { user }
     }
     catch (err) {

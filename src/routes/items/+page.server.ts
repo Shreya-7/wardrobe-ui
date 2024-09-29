@@ -1,5 +1,5 @@
-import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear } from "../../client";
-import { getItemFormData, getItemFormModel } from "$lib/itemFormUtils";
+import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear, ItemImagesService } from "../../client";
+import { getItemFormData, getItemFormModel, uploadImageForItem } from "$lib/itemFormUtils";
 import { fail, redirect } from "@sveltejs/kit";
 import { USER_ID } from "../../constants";
 
@@ -21,13 +21,13 @@ export const actions = {
         if (!userId) {
             throw redirect(302, "/unauthorised");
         }
+        var createdItem = null;
         try {
             var itemToBeCreated: Item = getItemFormData(data, userId);
             try {
-                const createdItem: any = await ItemsService.itemsPostItemsPost(itemToBeCreated);
-                console.log("Successfully created new item: " + createdItem);
-                // TODO below once API is fixed to return createdItem
-                // return redirect(303, "/items/" + createdItem.item_id);
+                createdItem = await ItemsService.itemsPostItemsPost(itemToBeCreated);
+                console.log("Successfully created new item: " + createdItem.item_id);
+                await uploadImageForItem(createdItem, data);
             }
             catch (err) {
                 console.log("Error occured when trying to create item ", err);
@@ -39,5 +39,7 @@ export const actions = {
             // user will simply see the all items page without knowing whether the op was a success
             return fail(422, { failure: true, errorMessage: "Invalid input data! :/" })
         }
+        // this needs to be outside any catch block as per Svelte docs
+        throw redirect(303, "/items/" + createdItem.item_id);
 	}
 };
