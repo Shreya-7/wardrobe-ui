@@ -1,7 +1,7 @@
-import { ItemsService, type Item } from "../../../client";
+import { ItemsService, type Item } from "../../../../client";
 import { getItemFormData, getItemFormModel, hasItemBeenUpdated, uploadImageForItem } from "$lib/itemFormUtils";
 import { fail, redirect } from "@sveltejs/kit";
-import { USER_ID } from "../../../constants";
+import { USER_ID } from "../../../../constants";
 
 let item: Item;
 
@@ -18,10 +18,7 @@ export async function load({ params }) {
 export const actions = {
     update: async ({ cookies, request }) => {
         const data = await request.formData();
-        const userId = cookies.get(USER_ID);
-        if (!userId) {
-            throw redirect(302, "/unauthorised");
-        }
+        const userId = cookies.get(USER_ID)!;
         try {
             const inputItem: Item = getItemFormData(data, userId);
             // the form does not send back the `item_id`

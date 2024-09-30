@@ -1,26 +1,23 @@
-import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear, ItemImagesService } from "../../client";
+import { type Item, Time, Season, Occasion, ItemsService, type Accessory, type Bottomwear, type Footwear, type Topwear, type SinglePiece, type Underwear, ItemImagesService } from "../../../client";
 import { getItemFormData, getItemFormModel, uploadImageForItem } from "$lib/itemFormUtils";
 import { fail, redirect } from "@sveltejs/kit";
-import { USER_ID } from "../../constants";
+import { USER_ID } from "../../../constants";
 
 let items: Item[];
 
 export async function load() {
     console.log("Fetching all items...");
     items = await ItemsService.itemsGetItemsGet();
-    return { 
+    return {
         items: items,
         createFormDropdownValues: getItemFormModel()
     };
 }
 
 export const actions = {
-	create: async ({ cookies, request }) => {
+    create: async ({ cookies, request }) => {
         const data = await request.formData();
-        const userId = cookies.get(USER_ID);
-        if (!userId) {
-            throw redirect(302, "/unauthorised");
-        }
+        const userId = cookies.get(USER_ID)!;
         let createdItem = null;
         try {
             const itemToBeCreated: Item = getItemFormData(data, userId);
@@ -41,5 +38,5 @@ export const actions = {
         }
         // this needs to be outside any catch block as per Svelte docs
         throw redirect(303, "/items/" + createdItem.item_id);
-	}
+    }
 };

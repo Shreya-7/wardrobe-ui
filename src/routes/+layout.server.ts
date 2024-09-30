@@ -2,11 +2,11 @@ import { OpenAPI, UsersService } from "../client";
 import { ACCESS_TOKEN, IS_USER_DATA_SET, USER_ID, USER_NAME } from "../constants";
 import type { LayoutServerLoad } from "./$types";
 
-
-// this data is being fetched here because we want the user data to be accessible to all child pages
-// adding to the `login` route layout page would not have worked since it isn't high up enough in the hierarchy
 export const load = (async ({ cookies }) => {
     const accessToken = cookies.get(ACCESS_TOKEN);
+    if (!accessToken) {
+        return {}
+    }
     OpenAPI.TOKEN = accessToken;
     if (accessToken && (cookies.get(IS_USER_DATA_SET) === "true")) {
         return {

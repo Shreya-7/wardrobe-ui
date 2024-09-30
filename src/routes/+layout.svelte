@@ -1,9 +1,9 @@
 <script lang="ts">
     import Nav from "$lib/components/Nav.svelte";
-
-    export let data;
+    import { page } from '$app/stores';
+    $: user = $page.data.user;
 </script>
-<Nav user={data.user}/>
+<Nav user={user}/>
 <div class="p-3">
     <slot />
 </div>
