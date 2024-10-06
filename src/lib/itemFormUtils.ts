@@ -1,4 +1,5 @@
-import { isEqual } from "lodash";
+import pkg from 'lodash';
+const { isEqual } = pkg;
 import { Time, Season, Occasion, Kind, Material, Size, type Item, ItemImagesService } from "../client";
 
 export function getItemFormModel() {
