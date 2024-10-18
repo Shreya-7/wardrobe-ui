@@ -9,8 +9,11 @@
     style="background-color: #e3f2fd;"
 >
     <a class="navbar-brand" href="/">Almirah</a>
-    <div>
-        <ul class="navbar-nav">
+    <button class="navbar-toggler align-center" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="/"
                     >Home <span class="sr-only">(current)</span></a
