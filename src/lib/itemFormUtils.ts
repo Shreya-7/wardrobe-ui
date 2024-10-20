@@ -8,10 +8,10 @@ export function getItemFormModel() {
         times: Object.values(Time).map(value => toTitleCase(value)),
         seasons: Object.values(Season).map(value => toTitleCase(value)),
         occasions: Object.values(Occasion).map(value => toTitleCase(value)),
-        sizes: Object.values(Size).map(value => toTitleCase(value)),
+        sizes: Object.values(Size).map(value => value.toUpperCase()),
         materials: Object.values(Material).map(value => toTitleCase(value)),
         // TODO model: pull from spec
-        categories: ["tshirt", "shirt", "sweatshirt"],
+        categories: ["tshirt", "shirt", "sweatshirt"].map(value => toTitleCase(value)),
         kinds: Object.values(Kind).map(value => toTitleCase(value))
     }
 }
@@ -21,7 +21,7 @@ export function getItemFormData(data: FormData, userId: string): Item {
     const category: any =  data.get('category')?.toString();
     return { 
         name: getRequestField(data, 'name'),
-        category: category,
+        category: getRequestField(data, 'category') as any,
         size: getRequestField(data, 'size') as Size,
         material: getRequestField(data, 'material') as Material,
         time: getRequestField(data, 'time') as Time,
@@ -33,6 +33,19 @@ export function getItemFormData(data: FormData, userId: string): Item {
         kind: getRequestField(data, 'kind') as Kind,
         user_id: userId
     };
+}
+
+export function getItemFieldName(field: string): string {
+    const choicesToFieldMap: { [key: string]: string } = {
+        "times": "time",
+        "seasons": "season",
+        "occasions": "occasion",
+        "sizes": "size",
+        "materials": "material",
+        "categories": "category",
+        "kinds": "kind"
+    };
+    return choicesToFieldMap[field];
 }
 
 export function getRequestField(data: FormData, property: string, lowercase: boolean = true) {
