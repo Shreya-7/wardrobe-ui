@@ -1,8 +1,44 @@
-<script>
+<script lang="ts">
     import ItemForm from "$lib/components/ItemForm.svelte";
+    import { getItemFieldName } from "$lib/itemFormUtils";
     export let data;
     export let form;
-    const items = data.items;
+    interface SelectedFilters {
+        [key: string]: Array<string>;
+    }
+
+    let selectedFilters: SelectedFilters;
+    $: selectedFilters = {};
+
+    $: displayItems = data.items;
+
+    function updateDisplayItems() {
+        displayItems = data.items.filter(item => {
+            for (const key in selectedFilters) {
+                if (selectedFilters[key].length === 0) {
+                    return true;
+                }
+                if (!(selectedFilters[key].includes(item[getItemFieldName(key)]))) {
+                    return false;
+                }
+            } 
+            return true;
+        });
+    }
+
+    function handleFilterSelection(event: { target: { name: any; value: any; checked: any; }; }) {
+        const { name, value, checked } = event.target;
+        if (checked) {
+            if (!selectedFilters[name]) {
+                selectedFilters[name] = [value];
+            } else {
+                selectedFilters[name].push(value);
+            }
+        } else {
+            selectedFilters[name] = selectedFilters[name].filter(existingValue => existingValue != value);
+        }
+        updateDisplayItems();
+    }
 </script>
 
 <style>
@@ -37,10 +73,35 @@
             item={null}
         />
     </div>
+
+    <button class="btn btn-primary mb-3" type="button" data-toggle="collapse" data-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+        Filters
+    </button>
+    <div class="collapse mb-3" id="filterCollapse">
+        <form>
+            <div class="card-columns">
+                {#each Object.entries(data.createFormDropdownValues) as [category, options]}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{category}</h5>
+                        <p class="card-text">
+                            {#each options as option}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="{category.toLowerCase()}" value="{option.toLowerCase()}" id="{option}" on:change={handleFilterSelection}>
+                                    <label class="form-check-label" for="{option}">{option}</label>
+                                </div>
+                            {/each}
+                        </p>
+                    </div>
+                </div>
+                {/each}
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card-columns">
-    {#each Object.entries(items) as [index, item]}
+    {#each Object.entries(displayItems) as [index, item]}
     <a href="/items/{item.item_id}">
         <div class="card">
             <img class="card-img-top" src="{item.image}" alt="Card cap">
