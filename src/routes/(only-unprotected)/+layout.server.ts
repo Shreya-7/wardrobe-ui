@@ -5,6 +5,6 @@ import { ACCESS_TOKEN } from "../../constants";
 export const load = (async ({ cookies }) => {
     const accessToken = cookies.get(ACCESS_TOKEN);
     if (accessToken) {
-        throw redirect(302, "/");
+        redirect(302, "/");
     }
 }) satisfies LayoutServerLoad;

@@ -37,6 +37,6 @@ export const actions = {
             return fail(422, { failure: true, errorMessage: "Invalid input data! :/" })
         }
         // this needs to be outside any catch block as per Svelte docs
-        throw redirect(303, "/items/" + createdItem.item_id);
+        redirect(303, "/items/" + createdItem.item_id);
     }
 };

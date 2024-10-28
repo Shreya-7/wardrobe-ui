@@ -3,6 +3,6 @@ import type { PageServerLoad } from "./$types";
 import { ACCESS_TOKEN, USER_ID } from "../../../constants";
 
 export const load: PageServerLoad = ({cookies}) => {
-    cookies.delete(ACCESS_TOKEN);
-    cookies.delete(USER_ID);
+    /* @migration task: add path argument */ cookies.delete(ACCESS_TOKEN);
+    /* @migration task: add path argument */ cookies.delete(USER_ID);
 }
