@@ -18,6 +18,6 @@ export const actions: Actions = {
             const apiError = err as ApiError
             return fail(apiError.status, { errorMessage: apiError.message })
         }
-        throw redirect(302, "/login");
+        redirect(302, "/login");
     }
 }

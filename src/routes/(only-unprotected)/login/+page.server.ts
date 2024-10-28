@@ -11,11 +11,11 @@ export const actions: Actions = {
         const loginRequest: AuthLoginPostRequest = { email_id, password };
         try {
             const loginResp = await AuthenticationService.authLoginPostAuthLoginPost(loginRequest);
-            cookies.set(ACCESS_TOKEN, loginResp);
+            /* @migration task: add path argument */ cookies.set(ACCESS_TOKEN, loginResp, {path: "/"});
         } catch (err) {
             const apiError = err as ApiError
             return fail(apiError.status, { errorMessage: apiError.message })
         }
-        throw redirect(302, "/");
+        redirect(302, "/");
     }
 }

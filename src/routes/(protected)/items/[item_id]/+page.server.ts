@@ -56,6 +56,6 @@ export const actions = {
         console.log("Successfully deleted item: " + item.item_id);
         // We need to redirect because the form action will cause the page to reload and 
         // call GET /items/item_id which will give a 404 since we (duh) just deleted it
-        throw redirect(303, "/items");
+        redirect(303, "/items");
     }
 };
