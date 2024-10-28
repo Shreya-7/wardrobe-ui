@@ -1,8 +1,10 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { ACCESS_TOKEN, USER_ID } from "../../../constants";
+import { ACCESS_TOKEN, IS_USER_DATA_SET, USER_ID, USER_NAME } from "../../../constants";
 
 export const load: PageServerLoad = ({cookies}) => {
     /* @migration task: add path argument */ cookies.delete(ACCESS_TOKEN);
     /* @migration task: add path argument */ cookies.delete(USER_ID);
+    cookies.delete(USER_NAME);
+    cookies.set(IS_USER_DATA_SET, "false");
 }
