@@ -32,13 +32,10 @@
         const file = target.files?.[0];
         
         if (file) {
-            console.log('Compressing selected image...');
             compressedImageFile = await compressImage(file);
-            console.log('Image compression complete');
         }
     };
 
-    // Intercept form submission to use compressed image instead of original
     const handleFormSubmit = async ({ formData }: { formData: FormData }) => {
         if (compressedImageFile) {
             console.log('Using compressed image for upload');

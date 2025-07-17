@@ -68,13 +68,6 @@ export function toTitleCase(str: string): string {
 
 export async function uploadImageForItem(item: Item, data: FormData) {
     const file: File = data.get("image") as File;
-    
-    // Skip upload if no file is provided
-    if (!file || file.size === 0) {
-        return;
-    }
-    
-    // Upload the image (compression happens client-side before form submission)
     await ItemImagesService.itemsPostItemsItemIdImagesPost(item.item_id!, {
         image_file: file
     });
@@ -82,8 +75,7 @@ export async function uploadImageForItem(item: Item, data: FormData) {
 }
 
 /**
- * Compresses images to max 1MB and 1920px dimensions before upload.
- * Reduces storage costs and improves upload speed. Falls back to original file if compression fails.
+ * Compresses images to max 1MB and 1920px dimensions before upload. Falls back to original file if compression fails.
  */
 export async function compressImage(file: File): Promise<File> {
     console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
@@ -96,13 +88,10 @@ export async function compressImage(file: File): Promise<File> {
             initialQuality: 0.8
         });
         
-        console.log(`Compressed file size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
-        console.log(`Compression ratio: ${((1 - compressedFile.size / file.size) * 100).toFixed(1)}%`);
-        
+        console.log(`Compressed file size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB with compression ratio: ${((1 - compressedFile.size / file.size) * 100).toFixed(1)}%`);        
         return compressedFile;
     } catch (error) {
         console.error('Error compressing image:', error);
-        console.log('Using original file');
         return file;
     }
 }
