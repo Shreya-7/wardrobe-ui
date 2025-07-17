@@ -19,9 +19,9 @@ export const load = (async ({ cookies }) => {
     }
     try {
         const user = await UsersService.usersUserIdGetUserGet();
-        cookies.set(USER_ID, user.user_id!);
-        cookies.set(USER_NAME, user.name!);
-        cookies.set(IS_USER_DATA_SET, "true");
+        cookies.set(USER_ID, user.user_id!, {secure: false});
+        cookies.set(USER_NAME, user.name!, {secure: false});
+        cookies.set(IS_USER_DATA_SET, "true", {secure: false});
         // not returning the entire object to maintain uniformity with the early return above
         return {
             user: {

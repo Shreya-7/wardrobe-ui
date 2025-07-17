@@ -11,7 +11,6 @@ export const actions: Actions = {
         const loginRequest: AuthLoginPostRequest = { email_id, password };
         try {
             const loginResp = await AuthenticationService.authLoginPostAuthLoginPost(loginRequest);
-            console.log(JSON.stringify(loginResp));
             cookies.set(ACCESS_TOKEN, loginResp, {secure: false});
         } catch (err) {
             const apiError = err as ApiError
