@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+    import { compressImage } from '$lib/itemFormUtils';
     import type { Item } from '../../client';
     export let action: string;
     export let sizes: Array<string>, 
@@ -22,13 +23,39 @@
         let valueOnItem = getValue(property);
         return valueOnItem.toString().toLowerCase() == value.toString().toLowerCase();
     }
+
+    let compressedImageFile: File | null = null;
+    
+    // Compress image when user selects a file (client-side, automatic)
+    const handleImageSelect = async (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+        
+        if (file) {
+            console.log('Compressing selected image...');
+            compressedImageFile = await compressImage(file);
+            console.log('Image compression complete');
+        }
+    };
+
+    // Intercept form submission to use compressed image instead of original
+    const handleFormSubmit = async ({ formData }: { formData: FormData }) => {
+        if (compressedImageFile) {
+            console.log('Using compressed image for upload');
+            formData.set('image', compressedImageFile);
+        }
+        
+        return async ({ update }: { update: () => Promise<void> }) => {
+            await update();
+        };
+    };
 </script>
 
 <!--
 In case of editing, we pre-populate the existing values of these fields so that the customer knows the value they are about to change.
 This unfortunately causes us to send the entire Item object to the edit action and to the backend API (which supports piecewise updates).
 -->
-<form method="POST" action="{action}" use:enhance enctype="multipart/form-data">
+<form method="POST" action="{action}" use:enhance={handleFormSubmit} enctype="multipart/form-data">
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="name">Name of the item</label>
@@ -37,7 +64,7 @@ This unfortunately causes us to send the entire Item object to the edit action a
         <!-- TODO: figure out how to display the existing image in case of editing -->
         <div class="form-group col-md-4">
             <label for="image">Image</label>
-            <input type="file" class="form-control" id="image" name="image" accept=".jpg, .png, .jpeg">
+            <input type="file" class="form-control" id="image" name="image" accept=".jpg, .png, .jpeg" on:change={handleImageSelect}>
         </div>
         <div class="form-group col-md-2">
             <label for="size">Size</label>

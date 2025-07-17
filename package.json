@@ -24,6 +24,7 @@
     },
     "type": "module",
     "dependencies": {
+        "browser-image-compression": "^2.0.2",
         "lodash": "^4.17.21"
     }
 }

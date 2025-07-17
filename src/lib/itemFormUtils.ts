@@ -1,6 +1,7 @@
 import pkg from 'lodash';
 const { isEqual } = pkg;
 import { Time, Season, Occasion, Kind, Material, Size, type Item, ItemImagesService } from "../client";
+import imageCompression from 'browser-image-compression';
 
 export function getItemFormModel() {
     return {
@@ -67,10 +68,43 @@ export function toTitleCase(str: string): string {
 
 export async function uploadImageForItem(item: Item, data: FormData) {
     const file: File = data.get("image") as File;
+    
+    // Skip upload if no file is provided
+    if (!file || file.size === 0) {
+        return;
+    }
+    
+    // Upload the image (compression happens client-side before form submission)
     await ItemImagesService.itemsPostItemsItemIdImagesPost(item.item_id!, {
         image_file: file
     });
     console.log("Successfully updated new item with image!");
+}
+
+/**
+ * Compresses images to max 1MB and 1920px dimensions before upload.
+ * Reduces storage costs and improves upload speed. Falls back to original file if compression fails.
+ */
+export async function compressImage(file: File): Promise<File> {
+    console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+    
+    try {
+        const compressedFile = await imageCompression(file, {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: false,
+            initialQuality: 0.8
+        });
+        
+        console.log(`Compressed file size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+        console.log(`Compression ratio: ${((1 - compressedFile.size / file.size) * 100).toFixed(1)}%`);
+        
+        return compressedFile;
+    } catch (error) {
+        console.error('Error compressing image:', error);
+        console.log('Using original file');
+        return file;
+    }
 }
 
 // We need to compare without images because the existing image is a string (URL) and the new image is a File object
