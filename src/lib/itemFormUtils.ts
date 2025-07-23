@@ -74,9 +74,6 @@ export async function uploadImageForItem(item: Item, data: FormData) {
     console.log("Successfully updated new item with image!");
 }
 
-/**
- * Compresses images to max 1MB and 1920px dimensions before upload. Falls back to original file if compression fails.
- */
 export async function compressImage(file: File): Promise<File> {
     console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
     

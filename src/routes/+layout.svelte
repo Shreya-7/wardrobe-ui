@@ -1,9 +1,14 @@
 <script lang="ts">
     import Nav from "$lib/components/Nav.svelte";
-    import { page } from '$app/stores';
-    $: user = $page.data.user;
+    import "../app.css";
+    
+    export let data;
+    $: user = data.user;
 </script>
-<Nav user={user}/>
-<div class="p-3">
-    <slot />
+
+<div class="min-h-screen bg-background">
+    <Nav user={user}/>
+    <main class="flex-1">
+        <slot />
+    </main>
 </div>

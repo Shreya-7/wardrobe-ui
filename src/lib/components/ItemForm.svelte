@@ -2,6 +2,12 @@
 	import { enhance } from '$app/forms';
     import { compressImage } from '$lib/itemFormUtils';
     import type { Item } from '../../client';
+    import { Button } from "$lib/components/ui/button";
+    import { Input } from "$lib/components/ui/input";
+    import { Label } from "$lib/components/ui/label";
+    import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+    import Select from "./custom/Select.svelte";
+
     export let action: string;
     export let sizes: Array<string>, 
         materials: Array<string>, 
@@ -19,12 +25,33 @@
         }
         return value ? value : "";
     }
+    
     function isPresentOnItem(property: keyof Item, value: string) {
         let valueOnItem = getValue(property);
         return valueOnItem.toString().toLowerCase() == value.toString().toLowerCase();
     }
 
+    // Default values for new items
+    function getDefaultValue(property: keyof Item) {
+        if (item != null) {
+            return getValue(property);
+        }
+        
+        const defaults: Partial<Record<keyof Item, string>> = {
+            category: "tshirt",
+            kind: "topwear",
+            size: "m",
+            material: "cotton",
+            time: "day",
+            season: "summer",
+            occasion: "casual"
+        };
+        
+        return defaults[property] || "";
+    }
+
     let compressedImageFile: File | null = null;
+    let selectedImageName: string = "";
     
     // Compress image when user selects a file (client-side, automatic)
     const handleImageSelect = async (event: Event) => {
@@ -32,6 +59,7 @@
         const file = target.files?.[0];
         
         if (file) {
+            selectedImageName = file.name;
             compressedImageFile = await compressImage(file);
         }
     };
@@ -48,80 +76,111 @@
     };
 </script>
 
-<!--
-In case of editing, we pre-populate the existing values of these fields so that the customer knows the value they are about to change.
-This unfortunately causes us to send the entire Item object to the edit action and to the backend API (which supports piecewise updates).
--->
-<form method="POST" action="{action}" use:enhance={handleFormSubmit} enctype="multipart/form-data">
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="name">Name of the item</label>
-            <input type="text" class="form-control" id="name" name="name" value="{getValue('name')}" required>
-        </div>
-        <!-- TODO: figure out how to display the existing image in case of editing -->
-        <div class="form-group col-md-4">
-            <label for="image">Image</label>
-            <input type="file" class="form-control" id="image" name="image" accept=".jpg, .png, .jpeg" on:change={handleImageSelect}>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="size">Size</label>
-            <select class="form-control" id="size" name="size">
-                {#each sizes as size}
-                <option value="{size}" selected="{isPresentOnItem('size', size)}">{size}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="size">Material</label>
-            <select class="form-control" id="material" name="material">
-                {#each materials as material}
-                <option value="{material}" selected="{isPresentOnItem('material', material)}">{material}</option>
-                {/each}
-            </select>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-3">
-            <label for="category">Category</label>
-            <select class="form-control" id="category" name="category" required>
-                {#each categories as category}
-                <option value="{category}" selected="{isPresentOnItem('category', category)}">{category}</option>
-                {/each}
-            </select>
-        </div>
-        
-        <div class="form-group col-md-3">
-            <label for="size">Time</label>
-            <select class="form-control" id="time" name="time">
-                {#each times as time}
-                <option value="{time}" selected="{isPresentOnItem('time', time)}">{time}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="size">Season</label>
-            <select class="form-control" id="season" name="season">
-                {#each seasons as season}
-                <option value="{season}" selected="{isPresentOnItem('season', season)}">{season}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="size">Occasion</label>
-            <select class="form-control" id="occasion" name="occasion">
-                {#each occasions as occasion}
-                <option value="{occasion}" selected="{isPresentOnItem('occasion', occasion)}">{occasion}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="size">Kind</label>
-            <select class="form-control" id="kind" name="kind">
-                {#each kinds as kind}
-                <option value="{kind}" selected="{isPresentOnItem('kind', kind)}">{kind}</option>
-                {/each}
-            </select>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<Card class="w-full max-w-4xl mx-auto">
+    <CardHeader>
+        <CardTitle>
+            {item ? 'Edit Item' : 'Add Item'}
+        </CardTitle>
+    </CardHeader>
+    
+    <CardContent>
+        <!--
+        In case of editing, we pre-populate the existing values of these fields so that the customer knows the value they are about to change.
+        This unfortunately causes us to send the entire Item object to the edit action and to the backend API (which supports piecewise updates).
+        -->
+        <form method="POST" action="{action}" use:enhance={handleFormSubmit} enctype="multipart/form-data" class="space-y-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <Label for="name">Name *</Label>
+                    <Input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        value="{getValue('name')}" 
+                        placeholder="Item name"
+                        required 
+                    />
+                </div>
+                
+                <div class="space-y-2">
+                    <Label for="image">Image</Label>
+                    <!-- TODO: figure out how to display the existing image in case of editing -->
+                    <div class="space-y-1">
+                        <Input 
+                            type="file" 
+                            id="image" 
+                            name="image" 
+                            accept=".jpg, .png, .jpeg" 
+                            on:change={handleImageSelect}
+                            class="file:mr-4 file:rounded-md file:border-0 file:bg-muted file:px-4 file:py-2 file:text-sm file:font-medium"
+                        />
+                        {#if selectedImageName}
+                            <p class="text-xs text-muted-foreground">Selected: {selectedImageName}</p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <Select 
+                    name="category" 
+                    label="Category" 
+                    options={categories} 
+                    selectedValue={getDefaultValue('category')} 
+                    required={true} 
+                />
+
+                <Select 
+                    name="kind" 
+                    label="Kind" 
+                    options={kinds} 
+                    selectedValue={getDefaultValue('kind')} 
+                />
+
+                <Select 
+                    name="size" 
+                    label="Size" 
+                    options={sizes} 
+                    selectedValue={getDefaultValue('size')} 
+                />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Select 
+                    name="material" 
+                    label="Material" 
+                    options={materials} 
+                    selectedValue={getDefaultValue('material')} 
+                />
+
+                <Select 
+                    name="time" 
+                    label="Time" 
+                    options={times} 
+                    selectedValue={getDefaultValue('time')} 
+                />
+
+                <Select 
+                    name="season" 
+                    label="Season" 
+                    options={seasons} 
+                    selectedValue={getDefaultValue('season')} 
+                />
+
+                <Select 
+                    name="occasion" 
+                    label="Occasion" 
+                    options={occasions} 
+                    selectedValue={getDefaultValue('occasion')} 
+                />
+            </div>
+
+            <div class="flex justify-end pt-4">
+                <Button type="submit" class="min-w-32">
+                    {item ? 'Update' : 'Add Item'}
+                </Button>
+            </div>
+        </form>
+    </CardContent>
+</Card>

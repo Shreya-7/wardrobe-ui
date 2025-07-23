@@ -1,58 +1,88 @@
 <script lang="ts">
-    import { redirect } from "@sveltejs/kit";
+    import { Button } from "$lib/components/ui/button";
+    import { Input } from "$lib/components/ui/input";
+    import { Label } from "$lib/components/ui/label";
+    import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+    import { Separator } from "$lib/components/ui/separator";
 
     export let errorMessage: string | undefined,
         actionName: string,
         actionPath: string,
         additionalInfoRequired: boolean;
-
 </script>
 
-<form method="POST" action="?/{actionPath}">
-    {#if additionalInfoRequired}
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input
-            type="name"
-            name="name"
-            class="form-control"
-            id="name"
-            aria-describedby="nameHelp"
-            placeholder="Enter name"
-        />
+<div class="min-h-screen flex items-center justify-center bg-muted/50 px-4">
+    <Card class="w-full max-w-md">
+        <CardHeader class="space-y-1">
+            <CardTitle class="text-2xl font-semibold text-center">
+                {actionName}
+            </CardTitle>
+        </CardHeader>
+        
+        <CardContent>
+            <form method="POST" action="?/{actionPath}" class="space-y-4">
+                {#if additionalInfoRequired}
+                    <div class="space-y-2">
+                        <Label for="name" class="text-sm font-medium">Name</Label>
+                        <Input
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Your name"
+                            required
+                        />
+                    </div>
+                {/if}
 
-        <small id="nameHelp" class="form-text text-muted"
-            >What do you call yourself?</small
-        >
-    </div>
-    {/if}
-    <div class="form-group">
-        <label for="email_id">Email address</label>
-        <input
-            type="email"
-            name="email_id"
-            class="form-control"
-            id="email_id"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-        />
+                <div class="space-y-2">
+                    <Label for="email_id" class="text-sm font-medium">Email</Label>
+                    <Input
+                        type="email"
+                        name="email_id"
+                        id="email_id"
+                        placeholder="Email address"
+                        required
+                    />
+                </div>
 
-        <small id="emailHelp" class="form-text text-muted"
-            >We'll never share your email with anyone else.</small
-        >
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input
-            type="password"
-            class="form-control"
-            name="password"
-            id="password"
-            placeholder="Password"
-        />
-    </div>
-    {#if errorMessage}
-        <div class="alert alert-danger">{errorMessage}</div>
-    {/if}
-    <button type="submit" class="btn btn-primary">{actionName}</button>
-</form>
+                <div class="space-y-2">
+                    <Label for="password" class="text-sm font-medium">Password</Label>
+                    <Input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Password"
+                        required
+                    />
+                </div>
+
+                {#if errorMessage}
+                    <div class="rounded-md border border-destructive/50 bg-destructive/10 p-3">
+                        <p class="text-sm text-destructive">{errorMessage}</p>
+                    </div>
+                {/if}
+
+                <Button type="submit" class="w-full" size="lg">
+                    {actionName}
+                </Button>
+            </form>
+
+            <div class="mt-6">
+                <Separator />
+                <div class="mt-4 text-center text-sm text-muted-foreground">
+                    {#if actionName === "Login"}
+                        Don't have an account? 
+                        <a href="/register" class="font-medium text-primary hover:text-primary/80 transition-colors">
+                            Sign up
+                        </a>
+                    {:else}
+                        Already have an account? 
+                        <a href="/login" class="font-medium text-primary hover:text-primary/80 transition-colors">
+                            Sign in
+                        </a>
+                    {/if}
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+</div>
