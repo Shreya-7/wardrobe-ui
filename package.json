@@ -9,9 +9,9 @@
         "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "generate": "npm run generate-client && npm run generate-ui",
-        "generate-client": "openapi --input http://localhost:8000/openapi.json --output ./src/client && sed -i '' \"s/BASE: '',/BASE: 'http:\\/\\/localhost:8000',/g\" ./src/client/core/OpenAPI.ts",
+        "generate-client": "openapi --input http://localhost:8000/openapi.json --output ./src/client",
         "generate-ui": "npm config set legacy-peer-deps true && npx shadcn-svelte@0.14.3 add button card input label badge separator collapsible --yes; npm config set legacy-peer-deps false",
-        "setup": "npm install && npm run generate",
+        "setup": "npm install --legacy-peer-deps && npm run generate",
         "clean": "rm -rf src/client src/lib/components/ui .svelte-kit build"
     },
     "devDependencies": {

@@ -10,3 +10,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 src/client
 src/lib/components/ui
+.idea
+package-lock.json
